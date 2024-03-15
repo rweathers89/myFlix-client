@@ -1,0 +1,1 @@
+Parcel Path in terminal: parcel ["src/index.html"]
