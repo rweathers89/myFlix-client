@@ -1,16 +1,21 @@
 // Here you import the PropTypes library
 import PropTypes from "prop-types";
+import { Button, Card } from "react-bootstrap";
 
-// The MovieCard function component
 export const MovieCard = ({ movie, onMovieClick }) => {
     return (
-        <div
-            onClick={() => {
-                onMovieClick(movie);
-            }}
-        >
-            {movie.title}
-        </div>
+        <Card className="h-100">
+            <Card.Img variant="top" src={movie.image} />
+            <Card.Body>
+                <Card.Title>{movie.title}</Card.Title>
+                <Card.Text>{movie.director}</Card.Text>
+                <Button onClick={() => onMovieClick(movie)}
+                    vairant="link"
+                >
+                    Open
+                </Button>
+            </Card.Body>
+        </Card>
     );
 };
 
@@ -25,3 +30,17 @@ MovieCard.propTypes = {
     }).isRequired,
     onMovieClick: PropTypes.func.isRequired,
 };
+
+
+// The MovieCard function component
+/*export const MovieCard = ({ movie, onMovieClick }) => {
+    return (
+        <div
+            onClick={() => {
+                onMovieClick(movie);
+            }}
+        >
+            {movie.title}
+        </div>
+    );
+}; */
