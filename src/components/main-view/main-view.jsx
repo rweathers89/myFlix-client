@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { MovieCard } from "../movie-card/movie-card";
-import { MovieView } from "../movie-view/movie-view";
-import { LoginView } from "../login-view/login-view";
-import { SignupView } from "../signup-view/signup-view";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { Row, Col } from "react-bootstrap";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
+
+import { MovieCard } from "../movie-card/movie-card";
+import { MovieView } from "../movie-view/movie-view";
+
+import { LoginView } from "../login-view/login-view";
+import { SignupView } from "../signup-view/signup-view";
+import { ProfileView } from "../profile-view/profile-view";
 
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -14,6 +16,8 @@ export const MainView = () => {
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [movies, setmovies] = useState([]);
+    //const [favoriteMovies, setFav] = useState("");
+    // const navigate = useNavigate(); 
     //const [selectedMovie, setSelectedMovie] = useState(null);
 
     useEffect(() => {
@@ -27,24 +31,47 @@ export const MainView = () => {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Movies data: ", data);
-                const moviesFromApi = data.docs.map((doc) => {
+                const moviesFromApi = data.map((data) => {
                     return {
-                        id: doc.key,
-                        title: doc.title,
+                        id: data._id,
+                        title: data.title,
                         //add image link here
-                        image: ``,
-                        author: doc.author_name?.[0],
+                        image: data.imageUrl,
+                        director: data.director,
+                        genre: data.genre,
+                        description: data.description
                     };
                 });
 
                 setMovies(moviesFromApi);
+                localStorage.setItem("movies", JSON.stringify(movies));
                 console.log("movies from api:", data);
             });
-    }, [token]);
+    }, [token]); //END useEffect (!token)
+
+    const handleSearch = (e) => {
+
+        const query = e.target.value;
+        setSearchQuery(query);
+
+        //Filter movies by title, genre or director
+        const filteredMovies = movies.filter((movie) => {
+            return (
+                movie.title.toLowerCase().includes(query.toLowerCase())
+                ||
+                movie.genre.toLowerCase().includes(query.toLowerCase())
+                ||
+                movie.director.toLowerCase().includes(query.toLowerCase())
+            );
+        })
+        setMovies(filteredMovies);
+    }
 
     return (
         <BrowserRouter>
             <NavigationBar user={user}
+                query={searchQuery}
+                handleSearch={handleSearch}
                 onLoggedOut={() => {
                     setUser(null);
                     setToken(null)
