@@ -1,10 +1,33 @@
+import React from "react";
+import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { MovieCard } from "..movie-card/movie-card";
 
-export const MovieView = ({ movie, onBackClick }) => {
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import "./movie-view.scss";
+
+export const MovieView = ({ movies }) => {
+    const { movieId } = useParams();
+
+    const movie = movies.find((m) => m.id === movieId);
+
+    /*
+    //Find similar movies based on genre
+    const similarMovies = movies.filter((m) => {
+        return (
+            m.id !== movie.id &&
+            m.genre.some((genre) => movie.genre.includes(genre))
+        )
+    });
+    */
+
     return (
         <div>
             <div>
-                <img src={movie.image} />
+                <img src={movie.image} height={300} alt="Movie Poster" />
             </div>
             <div>
                 <span>Title: </span>
@@ -22,7 +45,16 @@ export const MovieView = ({ movie, onBackClick }) => {
                 <span>Description: </span>
                 <span>{movie.description}</span>
             </div>
-            <button onClick={onBackClick}>Back</button>
+            <Link to={`/`}>
+                <button
+                    onClick={onBackClick}
+                    className="back-button"
+                    style={{ cursor: "pointer" }}
+                >
+                    Back
+                </button>
+            </Link>
+
         </div>
     );
 };
@@ -38,3 +70,18 @@ MovieView.propTypes = {
     }).isRequired,
     onBackClick: PropTypes.func.isRequired,
 };
+
+/*
+            <Col classname="mb-5">
+                <hr />
+                <h3 className="title">Similar Movies</h3>
+                <Row>
+                    {similarMovies.map((movie) => (
+                        <Col key={movie.id} xs={6} sm={6} md={6}>
+                            <MovieCard movie={movie} />
+                        </Col>
+                    ))
+                    }
+                </Row>
+            </Col>
+            */
