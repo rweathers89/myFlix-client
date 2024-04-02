@@ -8,7 +8,7 @@ import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { ProfileView } from "../profile-view/profile-view";
-import MoviesList from "../moveies-list/movies-list";
+import { MoviesList } from "../movies-List/movies-list";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 
 
