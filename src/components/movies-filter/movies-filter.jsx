@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Form from "react-bootstrap/Form";
 import { setFilter } from "../../redux/reducers/movies";
 
-export const BooksFilter = () => {
-    const filter = useSelector((state) => state.books.filter);
+export const MoviesFilter = () => {
+    const filter = useSelector((state) => state.movies.filter);
     const dispatch = useDispatch();
 
     return (
