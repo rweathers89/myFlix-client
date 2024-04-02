@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col, Figure, Button } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
-import "./profil-view.scss";
+import "./profile-view.scss";
 import { Link } from "react-router-dom";
 
 export const FavouriteMovies = ({ user, favoriteMovies }) => {
