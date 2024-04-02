@@ -4,14 +4,17 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { MovieCard } from "..movie-card/movie-card";
 
-import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import { Button, Row, Col } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 import "./movie-view.scss";
 
 export const MovieView = ({ movies }) => {
+    //Redux
+    const movies = useSelector((state) => state.movies.list);
+    const dispatch = useDispatch();
+    //get movieId from the URL
     const { movieId } = useParams();
-
+    //find movie by movieID
     const movie = movies.find((m) => m.id === movieId);
 
     /*
