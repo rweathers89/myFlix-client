@@ -4,7 +4,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import "./profile-view.scss";
 import { Link } from "react-router-dom";
 
-export const FavouriteMovies = ({ user, favoriteMovies }) => {
+export const FavoriteMovies = ({ user, favoriteMovies }) => {
     return (
         <Card className="card">
             <Card.Body>

@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 //Components
-//import { MovieCard } from "../movie-card/movie-card";
+import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
@@ -17,10 +17,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { setMovies } from "../../redux/reducers/movies";
 
 export const MainView = () => {
-    const user = useSelector((state) => state.user);
-    const movies = useSelector((state) => state.movies.list);
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
+
+    const user = useSelector((state) => state.user);
+    const movies = useSelector((state) => state.movies.list);
+
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const dispatch = useDispatch();
 
@@ -77,7 +79,17 @@ export const MainView = () => {
 
     return (
         <BrowserRouter>
-            <NavigationBar />
+            <NavigationBar
+                user={user}
+                query={query}
+                handleSearch={handleSearch}
+                movies={movies}
+                onLoggedOut={() => {
+                    setUser(null);
+                    setToken(null);
+                    localStorage.clear();
+                }}
+            />
             <Row className="justify-content-md-center">
                 <Routes>
                     <Route
