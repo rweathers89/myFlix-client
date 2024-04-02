@@ -6,7 +6,7 @@ import { Button, Card, Container, Row, Col } from "react-bootstrap";
 import { FavoriteMovies } from "./favorite-movies";
 import { UpdateUser } from "./update-user";
 import { Link } from "react-router-dom";
-import UserInfo from "./user-info";
+import { UserInfo } from "./user-info";
 
 export const ProfileView = ({ user, movies, token }) => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
