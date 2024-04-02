@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { NavigationBar } from "../navigation-bar/navigation-bar";
 
-import { MovieCard } from "../movie-card/movie-card";
+//Components
+//import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
-
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { ProfileView } from "../profile-view/profile-view";
+import MoviesList from "../moveies-list/movies-list";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
 
+
+//Redux
 import { useSelector, useDispatch } from "react-redux";
 import { setMovies } from "../../redux/reducers/movies";
 
@@ -19,6 +22,7 @@ export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
     const [token, setToken] = useState(storedToken ? storedToken : null);
+    const dispatch = useDispatch();
 
     //const [favoriteMovies, setFav] = useState("");
     // const navigate = useNavigate(); 
@@ -96,7 +100,12 @@ export const MainView = () => {
                             <>
                                 {user ? (
                                     <Navigate to="/" />
-                                ) : <LoginView />
+                                ) : <LoginView
+                                    onLoggedIn={(user, token) => {
+                                        setUser(user);
+                                        setToken(token);
+                                    }}
+                                />
                                 }
                             </>
                         }
@@ -109,7 +118,12 @@ export const MainView = () => {
                                     <Navigate to="/login" replace />
                                 ) : movies.length === 0 ?
                                     <Col>The list is empty!</Col>
-                                    : <MovieView />}
+                                    : <MovieView
+                                        movies={movies}
+                                        token={token}
+                                        user={user}
+                                        updatedUser={updatedUser}
+                                    />}
                             </>
                         }
                     />
@@ -118,6 +132,28 @@ export const MainView = () => {
                         element={
                             <>
                                 {!user ? <Navigate to="/login" replace /> : <MoviesList />}
+                            </>
+                        }
+                    />
+
+                    <Route
+                        path="/profile"
+                        element={
+                            <>
+                                {user ? (
+                                    <Navigate to="/login" replace />
+                                ) : (<ProfileView
+                                    user={user}
+                                    token={token}
+                                    movies={movies}
+                                    onLoggedOut={() => {
+                                        setUser(null);
+                                        setToken(null);
+                                        localStorage.clear();
+                                    }}
+                                    updatedUser={updatedUser}
+                                />)
+                                }
                             </>
                         }
                     />

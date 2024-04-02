@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { MovieCard } from "..movie-card/movie-card";
+//import { MovieCard } from "../movie-card/movie-card";
 
 import { Button, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
