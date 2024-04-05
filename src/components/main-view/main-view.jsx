@@ -8,7 +8,7 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
-import { MoviesList } from "../movies-list/movies-list";
+import { MoviesList } from "../movies-List/movies-list";
 
 //Redux
 import { useSelector, useDispatch } from "react-redux";
