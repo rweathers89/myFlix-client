@@ -1,11 +1,128 @@
-import React, { useEffect, useState } from "react";
 // Here you import the PropTypes library
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "./movie-card.scss";
+
+// The MovieCard function component
+export const MovieCard = ({ movie }) => {
+    useEffect(() => {
+        const addToFavorites = () => {
+            fetch(
+                `API_URL/users/${user.username}/movies/${encodeURIComponent(
+                    movie.title
+                )}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to add movie to favorites.");
+                    }
+                    alert("Movie added to favorites successfully!");
+                    window.location.reload();
+                    return response.json();
+                })
+                .then((user) => {
+                    if (user) {
+                        localStorage.setItem("user", JSON.stringify(user));
+                        setUser(user);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }; // END addToFavorites
+
+        const removeFromFavorites = () => {
+            fetch(
+                `API_URL/users/${user.username}/movies/${encodeURIComponent(
+                    movie.title
+                )}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to remove movie from favorites.");
+                    }
+                    alert("Movie removed from favorites successfully!");
+                    window.location.reload();
+                    return response.json();
+                })
+                .then((user) => {
+                    if (user) {
+                        localStorage.setItem("user", JSON.stringify(user));
+                        setUser(user);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }; // END removeFromFavorites
+
+        if (addTitle) {
+            addToFavorites();
+        }
+        if (delTitle) {
+            removeFromFavorites();
+        }
+    }, [addTitle, delTitle, token]);
+
+    const handleAddToFavorites = () => {
+        setAddTitle(movie.title);
+    };
+    const handleRemoveFromFavorites = () => {
+        setDelTitle(movie.title);
+    };
+
+    return (
+        <Card className="h-100">
+            <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
+                <Card.Img variant="top" src={movie.image} />
+                <Card.Body>
+                    <Card.Title>{movie.title}</Card.Title>
+                    <Card.Text>{movie.director}</Card.Text>
+
+                    <Button variant="link" className="open-button">
+                        Open
+                    </Button>
+                </Card.Body>
+            </Link>
+        </Card>
+    ); // END return
+}; // END const MovieCard
+
+// Here is where we define all the props constraints for the MovieCard
+MovieCard.propTypes = {
+    movie: PropTypes.shape({
+        title: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
+        director: PropTypes.string.isRequired,
+        genre: PropTypes.string.isRequired,
+        description: PropTypes.string,
+    }).isRequired,
+};
 
 
-export const MovieCard = ({ movie, isFavorite, addFav, removeFav }) => {
+/*
+// Here you import the PropTypes library
+import PropTypes from "prop-types";
+import { Button, Card } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import "./movie-card.scss";
+
+export const MovieCard = ({ movie }) => {
     const add = () => addFav(movie.id);
     const remove = () => removeFav(movie.id);
 
@@ -45,7 +162,7 @@ export const MovieCard = ({ movie, isFavorite, addFav, removeFav }) => {
 
 // Here is where we define all the props constraints for the MovieCard
 MovieCard.propTypes = {
-    book: PropTypes.shape({
+    movie: PropTypes.shape({
         title: PropTypes.string.isRequired,
         image: PropTypes.string.isRequired,
         director: PropTypes.string.isRequired,
@@ -198,3 +315,4 @@ return (
         </div>
     );
 }; */
+
