@@ -1,10 +1,10 @@
 import React from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 //import { MovieCard } from "../movie-card/movie-card";
 
-import { Button, Row, Col } from "react-bootstrap";
+//import { Button, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import "./movie-view.scss";
 
@@ -17,20 +17,11 @@ export const MovieView = ({ movies }) => {
     //find movie by movieID
     const movie = movies.find((m) => m.id === movieId);
 
-    /*
-    //Find similar movies based on genre
-    const similarMovies = movies.filter((m) => {
-        return (
-            m.id !== movie.id &&
-            m.genre.some((genre) => movie.genre.includes(genre))
-        )
-    });
-    */
 
     return (
         <div>
             <div>
-                <img src={movie.image} height={300} alt="Movie Poster" />
+                <img src={movie.image} />
             </div>
             <div>
                 <span>Title: </span>
@@ -50,7 +41,7 @@ export const MovieView = ({ movies }) => {
             </div>
             <Link to={`/`}>
                 <button
-                    onClick={onBackClick}
+
                     className="back-button"
                     style={{ cursor: "pointer" }}
                 >
@@ -64,7 +55,7 @@ export const MovieView = ({ movies }) => {
 
 // Here is where we define all the props constrainst for MovieView
 MovieView.propTypes = {
-    book: PropTypes.shape({
+    movie: PropTypes.shape({
         title: PropTypes.string.isRequired,
         image: PropTypes.string.isRequired,
         director: PropTypes.string.isRequired,
