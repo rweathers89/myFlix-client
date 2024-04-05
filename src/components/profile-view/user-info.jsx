@@ -1,10 +1,10 @@
 import React from "react";
 
-export const UserInfo = (email, name) => {
+export const UserInfo = (username, email) => {
     return (
         <div>
-            <h4>My Info</h4>
-            <p>Name: {name}</p>
+
+            <p>Name: {username}</p>
             <p>email: {email}</p>
         </div>
     )

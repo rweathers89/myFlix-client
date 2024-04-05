@@ -4,55 +4,62 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import PropTypes from "prop-types";
 
-export const UpdateUser = ({ handleSubmit, handleUpdate }) => {
+export const UpdateUser = ({ formData, handleSubmit, handleUpdate, handleDeleteAccount }) => {
 
     return (
         <Row>
             <Form onSubmit={handleSubmit}>
                 <h4>Update profile information</h4>
-                <Form.Group controlId="formUsername">
+                <Form.Group controlId="formUsername" className="mb-2">
                     <Form.Label>Username:</Form.Label>
                     <Form.Control
                         type="text"
-                        value={username}
+                        value={formData.username}
                         onChange={(e) => handleUpdate(e)}
                         required
                         minLength="3"
                     />
                 </Form.Group>
 
-                <Form.Group controlId="formPassword">
+                <Form.Group controlId="formPassword" className="mb-2">
                     <Form.Label>Password:</Form.Label>
                     <Form.Control
                         type="password"
-                        value={password}
+                        value={formData.password}
                         onChange={(e) => handleUpdate(e)}
                         required
                         minLength="6"
                     />
                 </Form.Group>
 
-                <Form.Group controlId="formEmail">
+                <Form.Group controlId="formEmail" className="mb-2">
                     <Form.Label>Email:</Form.Label>
                     <Form.Control
                         type="email"
-                        value={email}
+                        value={formData.email}
                         onChange={(e) => handleUpdate(e)}
                         required
                     />
                 </Form.Group>
 
-                <Form.Group controlId="formBirthday">
+                <Form.Group controlId="formBirthday" className="mb-2">
                     <Form.Label>Birthday:</Form.Label>
                     <Form.Control
                         type="date"
-                        value={birthday}
+                        value={formData.birthday}
                         onChange={(e) => handleUpdate(e)}
                         required
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit" >
                     Submit Changes
+                </Button>
+                <Button
+                    onClick={() => handleDeleteAccount()}
+                    variant="outline-secondary"
+                    className="mx-3"
+                >
+                    Delete Account
                 </Button>
 
             </Form>

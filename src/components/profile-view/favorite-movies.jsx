@@ -1,24 +1,25 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Row, Col, Figure, Button } from "react-bootstrap";
-import { MovieCard } from "../movie-card/movie-card";
+//import { MovieCard } from "../movie-card/movie-card";
 import "./profile-view.scss";
 import { Link } from "react-router-dom";
 
 export const FavoriteMovies = ({ user, favoriteMovies }) => {
     return (
-        <Card className="card">
+        <Card>
             <Card.Body>
                 <Row>
-                    <Col md={12} >
-                        <h4>My Favorite Movies</h4>
+                    <Col xs={12} >
+                        <h2>My Favorite Movies</h2>
                     </Col>
                 </Row>
                 <Row>
-                    {favoriteMovies.map((ImagePath, Title, _id) => {
+                    {favoriteMovies.map((ImagePath, Title, Id) => {
                         return (
-                            <Col key={_id} xs={12} md={6} lg={3} className="fav-movie">
+                            <Col key={Id} xs={12} md={6} lg={3} className="fav-movie">
                                 <Figure>
-                                    <Link to={`/movies/${movie.title}`}>
+                                    <Link to={`/movies/${id}`}>
                                         <Figure.Image
                                             src={ImagePath}
                                             alt={Title}
@@ -29,8 +30,8 @@ export const FavoriteMovies = ({ user, favoriteMovies }) => {
                                     </Link>
                                 </Figure>
                                 <Button variant="secondary"
-                                    onClick={() => removeFav(movies._id)}>
-                                    Remove
+                                    onClick={() => removeFav(movies.id)}>
+                                    Remove Movie
                                 </Button>
                             </Col>
                         );
@@ -38,9 +39,14 @@ export const FavoriteMovies = ({ user, favoriteMovies }) => {
                 </Row>
             </Card.Body>
         </Card>
-    )
-}
+    );
+};
 
+
+FavoriteMovies.propTypes = {
+    favoriteMovies: PropTypes.array.isRequired,
+    user: PropTypes.object.isRequired,
+};
 
 /*<MovieCard
                                 movie={movie}

@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import Form from "react-bootstrap/Form";
+//import Form from "react-bootstrap/Form";
 import { Button, Card, Container, Row, Col } from "react-bootstrap";
 
 import { FavoriteMovies } from "./favorite-movies";
 import { UpdateUser } from "./update-user";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import { UserInfo } from "./user-info";
 
-export const ProfileView = ({ user, movies, token }) => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+export const ProfileView = ({ localuser, movies, token }) => {
+    // const storedUser = JSON.parse(localStorage.getItem("user"));
 
     const { username, setUserName } = useState(storedUser.username);
     const [password, setPassword] = useState(storedUser.password);
     const [email, setEmail] = useState(storedUser.email);
     const [birthday, setBirthday] = useState(storedUser.birthday);
     const [user, setUser] = useState();
-    const favoriteMovies = user === undefined ? [] : movies.filter(m => user.favoriteMovies.includes(m.title))
+
+    const favoriteMovies = movies.filter((m) =>
+        user.FavoriteMovies.includes(m.id)
+    );
 
     const formData = {
         Username: username,
@@ -69,14 +72,14 @@ export const ProfileView = ({ user, movies, token }) => {
             case "password":
                 setPassword(e.target.value);
                 break;
-            case "date":
+            case "birthday":
                 setBrithday(e.target.value);
             default:
         }
     }; // END handleUpdate
 
-    const handleDeleteAccount = (id) => {
-        fetch(`https://movie-api-nj6m.onrender.com/users/${id}`, {
+    const handleDeleteAccount = () => {
+        fetch(`https://movie-api-nj6m.onrender.com//users/${storedUser.username}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -93,7 +96,7 @@ export const ProfileView = ({ user, movies, token }) => {
         });
     }; //END handleDeleteAccount
 
-    const removeFav = (id) => { };
+
 
 
     useEffect(() => {
@@ -107,14 +110,15 @@ export const ProfileView = ({ user, movies, token }) => {
             .then((response) => response.json())
             .then((data) => {
                 console.log("Users data: ", data);
-                const usersFromApi = data.docs.map((resultUser) => {
+
+                const usersFromApi = data.map((user) => {
                     return {
-                        id: resultUser._id,
-                        username: resultUser.username,
-                        password: resultUser.password,
-                        email: resultUser.email,
-                        birthday: resultUser.birthday,
-                        favoriteMovies: resultUser.favoriteMovies,
+                        id: user.id,
+                        username: user.username,
+                        password: user.password,
+                        email: user.email,
+                        birthday: user.birthday,
+                        favoriteMovies: user.favoriteMovies,
                     };
                 });
 
@@ -129,39 +133,41 @@ export const ProfileView = ({ user, movies, token }) => {
     return (
         <Container>
             <Row>
-                <Col xs={12} sm={4}>
-                    <Card className="card">
-                        <Card.Body>
-                            <UserInfo name={user.Username} email={user.Email} />
-                        </Card.Body>
-                    </Card>
-                </Col>
-
-                <Col xs={12} sm={8}>
-                    <Card className="card">
-                        <Card.Body>
-                            <UpdateUser
-                                handleSubmit={handleSubmit}
-                                handleUpdate={handleUpdate}
-                                handleDeleteAccount={handleDeleteAccount} />
-                        </Card.Body>
-                    </Card>
-
-                </Col >
-                <Col xs={12} sm={4}>
-                    <FavoriteMovies favoriteMovies={favoriteMovies} />
+                <Card className="mb-5">
+                    <Card.Body>
+                        <Card.Title>My Profile </Card.Title>
+                        <Card.Text>
+                            {user && <UserInfo name={user.username} email={user.email} />}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card className="mb-5">
+                    <Card.Body>
+                        <UpdateUser
+                            formData={formData}
+                            handleUpdate={handleUpdate}
+                            handleSubmit={handleSubmit}
+                            handleDeleteAccount={handleDeleteAccount}
+                        />
+                    </Card.Body>
+                </Card>
+            </Row>
+            <Row>
+                <Col className="mb-5" xs={12} md={12}>
+                    {favoriteMovies && (
+                        <FavoriteMovies user={user} favoriteMovies={favoriteMovies} />
+                    )}
                 </Col>
             </Row>
         </Container>
     );
-};// END export ProfileView
+};
 
 ProfileView.propTypes = {
     localUser: PropTypes.object.isRequired,
     movies: PropTypes.array.isRequired,
-    token: PropTypes.string.isRequired
+    token: PropTypes.string.isRequired,
 };
-
 
 /*<Container className="mx-1">
     <Row>
