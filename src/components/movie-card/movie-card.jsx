@@ -9,7 +9,7 @@ export const MovieCard = ({ movie }) => {
     useEffect(() => {
         const addToFavorites = () => {
             fetch(
-                `API_URL/users/${user.username}/movies/${encodeURIComponent(
+                `https://movie-api-nj6m.onrender.com/users/${user.username}/movies/${encodeURIComponent(
                     movie.title
                 )}`,
                 {
@@ -41,7 +41,7 @@ export const MovieCard = ({ movie }) => {
 
         const removeFromFavorites = () => {
             fetch(
-                `API_URL/users/${user.username}/movies/${encodeURIComponent(
+                `https://movie-api-nj6m.onrender.com/users/${user.username}/movies/${encodeURIComponent(
                     movie.title
                 )}`,
                 {

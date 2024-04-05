@@ -34,7 +34,7 @@ export const MainView = () => {
             return;
         }
 
-        fetch("movie-api-nj6m.onrender.com/movies", {
+        fetch("https://movie-api-nj6m.onrender.com/movies", {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => response.json())
@@ -46,7 +46,7 @@ export const MainView = () => {
                         id: doc.key,
                         title: doc.title,
                         // change url to myMovie Mix API link
-                        image: `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`,
+                        image: `ImageURL`,
                         director: doc.director?.[0],
                     };
                 });

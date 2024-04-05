@@ -79,7 +79,7 @@ export const ProfileView = ({ localuser, movies, token }) => {
     }; // END handleUpdate
 
     const handleDeleteAccount = () => {
-        fetch(`https://movie-api-nj6m.onrender.com//users/${storedUser.username}`, {
+        fetch(`https://movie-api-nj6m.onrender.com/users/${storedUser.username}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${token}`,

@@ -10,10 +10,9 @@
         width: 100%;
 
         img {
-            display: block;
             height: 400px;
             margin: auto;
-
+            display: block;
         }
 
         figcaption {
@@ -22,7 +21,7 @@
     }
 
     button.btn {
-
+        display: block;
         margin: auto;
     }
 }

@@ -15,7 +15,7 @@ export const LoginView = ({ onLoggedIn }) => {
             Password: password,
         };
         // change url to myMovie Mix API link
-        fetch("ttps://movie-api-nj6m.onrender.com//search.json", {
+        fetch("https://movie-api-nj6m.onrender.com/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
