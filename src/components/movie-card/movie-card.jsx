@@ -1,11 +1,22 @@
 // Here you import the PropTypes library
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import "./movie-card.scss";
+import "./movie-card.css";
 
 // The MovieCard function component
 export const MovieCard = ({ movie }) => {
+
+    const storedToken = localStorage.getItem("token");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    const [user, setUser] = useState(storedUser ? storedUser : null);
+    const [token, setToken] = useState(storedToken ? storedToken : null);
+
+    const [addTitle, setAddTitle] = useState("");
+    const [delTitle, setDelTitle] = useState("");
+
     useEffect(() => {
         const addToFavorites = () => {
             fetch(
@@ -73,7 +84,7 @@ export const MovieCard = ({ movie }) => {
 
         if (addTitle) {
             addToFavorites();
-        }
+        };
         if (delTitle) {
             removeFromFavorites();
         }

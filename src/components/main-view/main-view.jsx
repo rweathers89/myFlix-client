@@ -8,25 +8,24 @@ import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
-import { MoviesList } from "../movies-List/movies-list";
+import { MovieCard } from "../movie-card/movie-card";
 
 //Redux
-import { useSelector, useDispatch } from "react-redux";
-import { setMovies } from "../../redux/reducers/movies";
+//import { useSelector, useDispatch } from "react-redux";
+//import { setMovies } from "../../redux/reducers/movies";
 
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
-    //const [movies, setMovies] = useState([]);
+    const [movies, setMovies] = useState([]);
 
     //Redux
-    const user = useSelector((state) => state.user);
-    const movies = useSelector((state) => state.movies.list);
+    //const user = useSelector((state) => state.user);
+    //const movies = useSelector((state) => state.movies.list);
 
+    //const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
-
-    //const [user, setUser] = useState(null);
+    const [user, setUser] = useState(null);
     const [token, setToken] = useState(null);
 
     useEffect(() => {
@@ -38,20 +37,21 @@ export const MainView = () => {
             headers: { Authorization: `Bearer ${token}` }
         })
             .then((response) => response.json())
-            .then((movies) => {
-                setMovies(movies);
+            .then((data) => {
+                // setMovies(movies);
                 console.log(data);
-                const moviesFromApi = data.docs.map((doc) => {
+                const moviesFromApi = data.map((movie) => {
                     return {
-                        id: doc.key,
-                        title: doc.title,
+                        id: movie.id,
+                        title: movie.title,
                         // change url to myMovie Mix API link
-                        image: `ImageURL`,
-                        director: doc.director?.[0],
+                        image: movie.imagePath,
+                        director: movie.director?.[0],
                     };
                 });
-
-                dispatch(setMovies(moviesFromApi));
+                //redux
+                //dispatch(setMovies(moviesFromApi));
+                setMovies(moviesFromApi);
                 localStorage.setItem("movies", JSON.stringify(movies));
                 console.log("movies from api:", data);
             });
@@ -62,6 +62,7 @@ export const MainView = () => {
         <BrowserRouter>
             <NavigationBar
                 user={user}
+                movies={movies}
                 onLoggedOut={() => {
                     setUser(null);
                     setToken(null);
@@ -92,7 +93,8 @@ export const MainView = () => {
                                     <Navigate to="/" />
                                 ) : (
                                     <Col md={5}>
-                                        <LoginView onLoggedIn={(user) => setUser(user)} />
+                                        <LoginView onLoggedIn={(user, token) => { setUser(user); setToken(token); }} />
+
                                     </Col>
                                 )}
                             </>
@@ -114,11 +116,24 @@ export const MainView = () => {
                             </>
                         }
                     />
+
                     <Route
                         path="/"
                         element={
                             <>
-                                {!user ? <Navigate to="/login" replace /> : <MoviesList />}
+                                {!user ? (
+                                    <Navigate to="/login" replace />
+                                ) : movies.length === 0 ? (
+                                    <Col>The list is empty!</Col>
+                                ) : (
+                                    <>
+                                        {movies.map((movie) => (
+                                            <Col className="mb-4" key={movie.id} md={3}>
+                                                <MovieCard movie={movie} />
+                                            </Col>
+                                        ))}
+                                    </>
+                                )}
                             </>
                         }
                     />
@@ -225,6 +240,23 @@ const handleSearch = (e) => {
                             </>
                         }
                     />
+ <Route
+                        path="/movies"
+                        element={
+                            <>
+                                {!user ? (
+                                    <Navigate to="/login" replace />
+                                ) : movies.length === 0 ? (
+                                    <Col>The list is empty!</Col>
+                                ) : (
+                                    <Col md={8}>
+                                        <MoviesList movies={movies} />
+                                    </Col>
+                                )}
+                            </>
+                        }
+                    />
+
                     <Route
                         path="/"
                         element={

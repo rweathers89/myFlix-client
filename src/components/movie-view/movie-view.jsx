@@ -1,17 +1,19 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-//import PropTypes from "prop-types";
+
 //import { MovieCard } from "../movie-card/movie-card";
 
 //import { Button, Row, Col } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
-import "./movie-view.scss";
+//import { useSelector, useDispatch } from "react-redux";
+import "./movie-view.css";
 
 export const MovieView = ({ movies }) => {
     //Redux
-    const movies = useSelector((state) => state.movies.list);
-    const dispatch = useDispatch();
+    //const movies = useSelector((state) => state.movies.list);
+    //const dispatch = useDispatch();
+
     //get movieId from the URL
     const { movieId } = useParams();
     //find movie by movieID
@@ -55,7 +57,7 @@ export const MovieView = ({ movies }) => {
 
 // Here is where we define all the props constrainst for MovieView
 MovieView.propTypes = {
-    movie: PropTypes.shape({
+    movies: PropTypes.shape({
         title: PropTypes.string.isRequired,
         image: PropTypes.string.isRequired,
         director: PropTypes.string.isRequired,
@@ -66,7 +68,11 @@ MovieView.propTypes = {
 };
 
 /*
-            <Col classname="mb-5">
+ <div>
+                <img src={movie.image} />
+            </div>            
+
+<Col classname="mb-5">
                 <hr />
                 <h3 className="title">Similar Movies</h3>
                 <Row>

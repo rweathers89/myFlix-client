@@ -2,10 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Row, Col, Figure, Button } from "react-bootstrap";
 //import { MovieCard } from "../movie-card/movie-card";
-import "./profile-view.scss";
+import "./profile-view.css";
 import { Link } from "react-router-dom";
 
-export const FavoriteMovies = ({ user, favoriteMovies }) => {
+export const FavoriteMovies = ({ favoriteMovies }) => {
     return (
         <Card>
             <Card.Body>

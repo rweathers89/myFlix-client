@@ -29,6 +29,8 @@ export const LoginView = ({ onLoggedIn }) => {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
                     onLoggedIn(data.user, data.token);
+                    // Redux
+                    // dispatch(setUser(username));
                 } else {
                     alert("No such user");
                 }
@@ -99,6 +101,7 @@ export const LoginView = ({ onLoggedIn }) => {
                     localStorage.setItem("user", JSON.stringify(data.user));
                     localStorage.setItem("token", data.token);
                     dispatch(setUser(username));
+                    //onLoggedIn(data.user, data.token);
                 } else {
                     alert("No such user");
                 }

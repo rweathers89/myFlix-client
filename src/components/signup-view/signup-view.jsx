@@ -18,7 +18,7 @@ export const SignupView = () => {
             Birthday: birthday
         };
 
-        fetch("SIGNUP_URL", {
+        fetch("https://movie-api-nj6m.onrender.com/users", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -31,7 +31,10 @@ export const SignupView = () => {
             } else {
                 alert("Signup failed");
             }
-        });
+        })
+            .catch((error) => {
+                console.error("Error: ", error);
+            });
     };
 
     return (
