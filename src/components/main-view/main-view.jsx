@@ -45,7 +45,8 @@ export const MainView = () => {
                         id: movie.id,
                         title: movie.title,
                         // change url to myMovie Mix API link
-                        image: movie.imagePath,
+                        //image: movie.imagePath,
+                        image: "https://movie-api-nj6m.onrender.com/movies",
                         director: movie.director?.[0],
                     };
                 });
