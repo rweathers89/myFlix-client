@@ -1,5 +1,5 @@
 // Here you import the PropTypes library
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -7,103 +7,14 @@ import "./movie-card.css";
 
 // The MovieCard function component
 export const MovieCard = ({ movie }) => {
-
-    const storedToken = localStorage.getItem("token");
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-
-    const [user, setUser] = useState(storedUser ? storedUser : null);
-    const [token, setToken] = useState(storedToken ? storedToken : null);
-
-    const [addTitle, setAddTitle] = useState("");
-    const [delTitle, setDelTitle] = useState("");
-
-    useEffect(() => {
-        const addToFavorites = () => {
-            fetch(
-                `https://movie-api-nj6m.onrender.com/users/${user.username}/movies/${encodeURIComponent(
-                    movie.title
-                )}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Failed to add movie to favorites.");
-                    }
-                    alert("Movie added to favorites successfully!");
-                    window.location.reload();
-                    return response.json();
-                })
-                .then((user) => {
-                    if (user) {
-                        localStorage.setItem("user", JSON.stringify(user));
-                        setUser(user);
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }; // END addToFavorites
-
-        const removeFromFavorites = () => {
-            fetch(
-                `https://movie-api-nj6m.onrender.com/users/${user.username}/movies/${encodeURIComponent(
-                    movie.title
-                )}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            )
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Failed to remove movie from favorites.");
-                    }
-                    alert("Movie removed from favorites successfully!");
-                    window.location.reload();
-                    return response.json();
-                })
-                .then((user) => {
-                    if (user) {
-                        localStorage.setItem("user", JSON.stringify(user));
-                        setUser(user);
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
-        }; // END removeFromFavorites
-
-        if (addTitle) {
-            addToFavorites();
-        };
-        if (delTitle) {
-            removeFromFavorites();
-        }
-    }, [addTitle, delTitle, token]);
-
-    const handleAddToFavorites = () => {
-        setAddTitle(movie.title);
-    };
-    const handleRemoveFromFavorites = () => {
-        setDelTitle(movie.title);
-    };
-
     return (
-        <Card className="h-100">
+        <Card className="h-100" md={6}>
             <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
-                <Card.Img variant="top" src={movie.image} />
-                <Card.Body>
-                    <Card.Title>{movie.title}</Card.Title>
-                    <Card.Text>{movie.director}</Card.Text>
+                <Card.Img variant="top" src={movie.ImagePath} />
+                <Card.Body className="d-flex flex-column">
+                    <Card.Title>{movie.Title}</Card.Title>
+                    <Card.Text>{movie.Description}</Card.Text>
+                    <Card.Text>{movie.Genre.Name}</Card.Text>
 
                     <Button variant="link" className="open-button">
                         Open
@@ -117,11 +28,11 @@ export const MovieCard = ({ movie }) => {
 // Here is where we define all the props constraints for the MovieCard
 MovieCard.propTypes = {
     movie: PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        image: PropTypes.string.isRequired,
-        director: PropTypes.string.isRequired,
-        genre: PropTypes.string.isRequired,
-        description: PropTypes.string,
+        Title: PropTypes.string.isRequired,
+        //image: PropTypes.string.isRequired,
+        // director: PropTypes.string.isRequired,
+        // genre: PropTypes.string.isRequired,
+        //description: PropTypes.string,
     }).isRequired,
 };
 
@@ -327,3 +238,94 @@ return (
     );
 }; */
 
+/**
+ *   const storedToken = localStorage.getItem("token");
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    const [user, setUser] = useState(storedUser ? storedUser : null);
+    const [token, setToken] = useState(storedToken ? storedToken : null);
+
+    const [addTitle, setAddTitle] = useState("");
+    const [delTitle, setDelTitle] = useState("");
+
+    useEffect(() => {
+        const addToFavorites = () => {
+            fetch(
+                `https://movie-api-nj6m.onrender.com/users/${user.username}/movies/${encodeURIComponent(
+                    movie.title
+                )}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to add movie to favorites.");
+                    }
+                    alert("Movie added to favorites successfully!");
+                    window.location.reload();
+                    return response.json();
+                })
+                .then((user) => {
+                    if (user) {
+                        localStorage.setItem("user", JSON.stringify(user));
+                        setUser(user);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }; // END addToFavorites
+
+        const removeFromFavorites = () => {
+            fetch(
+                `https://movie-api-nj6m.onrender.com/users/${user.username}/movies/${encodeURIComponent(
+                    movie.title
+                )}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                }
+            )
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Failed to remove movie from favorites.");
+                    }
+                    alert("Movie removed from favorites successfully!");
+                    window.location.reload();
+                    return response.json();
+                })
+                .then((user) => {
+                    if (user) {
+                        localStorage.setItem("user", JSON.stringify(user));
+                        setUser(user);
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }; // END removeFromFavorites
+
+        if (addTitle) {
+            addToFavorites();
+        };
+        if (delTitle) {
+            removeFromFavorites();
+        }
+    }, [addTitle, delTitle, token]);
+
+    const handleAddToFavorites = () => {
+        setAddTitle(movie.title);
+    };
+    const handleRemoveFromFavorites = () => {
+        setDelTitle(movie.title);
+    };
+ * 
+ */

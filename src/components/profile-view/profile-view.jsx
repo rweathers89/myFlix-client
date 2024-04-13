@@ -1,172 +1,258 @@
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-//import Form from "react-bootstrap/Form";
-import { Button, Card, Container, Row, Col } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Container, Button, Form, Card, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { MovieCard } from "../movie-card/movie-card";
+import "./profile-view.css";
 
-import { FavoriteMovies } from "./favorite-movies";
-import { UpdateUser } from "./update-user";
-//import { Link } from "react-router-dom";
-import { UserInfo } from "./user-info";
-
-export const ProfileView = ({ localuser, movies, token }) => {
+export const ProfileView = ({ user, movies }) => {
     // const storedUser = JSON.parse(localStorage.getItem("user"));
+    const token = localStorage.getItem("token");
+    const [userData, setUserData] = useState(user);
+    const Username = user ? user.Username : null;
 
-    const { username, setUserName } = useState(storedUser.username);
-    const [password, setPassword] = useState(storedUser.password);
-    const [email, setEmail] = useState(storedUser.email);
-    const [birthday, setBirthday] = useState(storedUser.birthday);
-    const [setUser] = useState();
+    const [newUsername, setNewUsername] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [newEmail, setNewEmail] = useState("");
+    const [newBirthday, setNewBirthday] = useState("");
 
-    const favoriteMovies = movies.filter((m) =>
-        user.FavoriteMovies.includes(m.id)
-    );
+    const [showUserInfo, setShowUserInfo] = useState(false);
+    const toggleShowUserInfo = () => setShowUserInfo(!showUserInfo);
 
-    const formData = {
-        Username: username,
-        Email: email,
-        Birthday: birthday,
-        Password: password
-    };
+    const [showUpdateForm, setShowUpdateForm] = useState(false);
+    const toggleShowUpdateForm = () => setShowUpdateForm(!showUpdateForm);
 
-    const handleSubmit = (event) => {
-        event.preventDefault(event);
+    const [showFavoriteMovies, setShowFavoriteMovies] = useState(false);
+    const toggleShowFavoriteMovies = () =>
+        setShowFavoriteMovies(!showFavoriteMovies);
 
-        fetch(`https://movie-api-nj6m.onrender.com/users/${user.username}`, {
-            method: "PUT",
-            body: JSON.stringify(formData),
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            }
-        }
-        )
-            .then((response) => {
-                if (response.ok) {
-                    alert("Update successful");
-                    window.location.reload();
+    const [showDeleteForm, setShowDeleteForm] = useState(false);
+    const toggleShowDeleteForm = () => setShowDeleteForm(!showDeleteForm);
 
-                    return response.json()
-                }
-                alert("Update failed");
-            })
-            .then((user) => {
-                if (user) {
-                    localStorage.setItem("user", JSON.stringify(user));
-                    setUser(user)
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }; //END handleSubmit
+    const navigate = useNavigate();
 
+    const favMovies = user.FavoriteMovies
+        ? movies.filter((m) => user.FavoriteMovies.includes(m._id))
+        : [];
 
-    const handleUpdate = (e) => {
-        switch (e.target.typ) {
-            case "text":
-                setUsername(e.target.value);
-                break;
-            case "email":
-                setEmail(e.target.value);
-                break;
-            case "password":
-                setPassword(e.target.value);
-                break;
-            case "birthday":
-                setBrithday(e.target.value);
-            default:
-        }
-    }; // END handleUpdate
-
-    const handleDeleteAccount = () => {
-        fetch(`https://movie-api-nj6m.onrender.com/users/${storedUser.username}`, {
-            method: "DELETE",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        }).then((response) => {
-            if (response.ok) {
-                alert("Account deleted");
-                localStorage.clear();
-                window.location.reload();
-            } else {
-                alert("Something went wrong");
-            }
-        });
-    }; //END handleDeleteAccount
-
-
-
-
+    // GET USER DATA FUNCTION
     useEffect(() => {
         if (!token) {
             return;
         }
-
-        fetch("https://movie-api-nj6m.onrender.com/users", {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log("Users data: ", data);
-
-                const usersFromApi = data.map((user) => {
-                    return {
-                        id: user.id,
-                        username: user.username,
-                        password: user.password,
-                        email: user.email,
-                        birthday: user.birthday,
-                        favoriteMovies: user.favoriteMovies,
-                    };
+        if (!user) {
+            fetch(
+                `https://movie-api-nj6m.onrender.com/users/${Username}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            )
+                .then((response) => response.json())
+                .then((responseData) => {
+                    setUserData({
+                        Username: responseData.Username,
+                        Email: responseData.Email,
+                        Birthday: responseData.Birthday,
+                        FavoriteMovies: responseData.FavoriteMovies,
+                    });
                 });
+        }
+    }, [token]);
 
-                setUser(usersFromApi.find((u) => u.username === localUser.username));
-                console.log("Profile Saved User:", JSON.stringify(user));
+    // UPDATE USER FUNCTION
+    const handleSubmit = (event) => {
+        event.preventDefault();
+
+        const newData = {
+            Username: newUsername,
+            Password: newPassword,
+            Email: newEmail,
+            Birthday: newBirthday,
+        };
+
+        fetch(
+            `https://movie-api-nj6m.onrender.com/users/${Username}`,
+            {
+                method: "PUT",
+                body: JSON.stringify(newData),
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        )
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.Username) {
+                    alert("Update successful");
+                    setUserData(newData);
+                    localStorage.setItem("user", JSON.stringify(response));
+                }
             })
             .catch((error) => {
-                console.error(error);
+                console.error("Error: ", error);
             });
-    }, [token]) //END useEffect
+    };
+
+    // DELETE USER FUNCTION
+    const handleDelete = (event) => {
+        event.preventDefault();
+
+        if (newUsername !== Username) {
+            alert(
+                "Incorrect username. Please enter your username to delete your account."
+            );
+            return;
+        }
+
+        fetch(
+            `https://movie-api-nj6m.onrender.com/users/${Username}`,
+            {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        ).then((response) => {
+            if (response.ok) {
+                setUserData(null);
+                localStorage.clear();
+                alert("User successfully deleted");
+                navigate("/return-signup");
+            }
+        });
+    };
 
     return (
         <Container>
-            <Row>
-                <Card className="mb-5">
-                    <Card.Body>
-                        <Card.Title>My Profile </Card.Title>
-                        <Card.Text>
-                            {user && <UserInfo name={user.username} email={user.email} />}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card className="mb-5">
-                    <Card.Body>
-                        <UpdateUser
-                            formData={formData}
-                            handleUpdate={handleUpdate}
-                            handleSubmit={handleSubmit}
-                            handleDeleteAccount={handleDeleteAccount}
-                        />
-                    </Card.Body>
-                </Card>
-            </Row>
-            <Row>
-                <Col className="mb-5" xs={12} md={12}>
-                    {favoriteMovies && (
-                        <FavoriteMovies user={user} favoriteMovies={favoriteMovies} />
+            {/* DISPLAY USER INFO CARD */}
+            <Card>
+                <Card.Body>
+                    <Card.Title>User Information</Card.Title>
+                    {showUserInfo && userData && (
+                        <div>
+                            <Card.Text>Username: {userData.Username}</Card.Text>
+                            <Card.Text>Email: {userData.Email}</Card.Text>
+                            <Card.Text>Birthday: {userData.Birthday}</Card.Text>
+                        </div>
                     )}
-                </Col>
-            </Row>
+                </Card.Body>
+                <Button type="button" variant="primary" onClick={toggleShowUserInfo}>
+                    {showUserInfo ? "Hide User Info" : "Show User Info"}
+                </Button>
+            </Card>
+            {/* UPDATE USER INFO CARD */}
+            <Card>
+                <Card.Body>
+                    <Card.Title>Update User</Card.Title>
+                    {showUpdateForm && (
+                        <Form>
+                            <Form.Group controlId="newUsername">
+                                <Form.Label>New Username:</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={newUsername}
+                                    onChange={(e) => setNewUsername(e.target.value)}
+                                    required
+                                    minLength="6"
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="newPassword">
+                                <Form.Label>New Password:</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    required
+                                    minLength="6"
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="newEmail">
+                                <Form.Label>New Email:</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    value={newEmail}
+                                    onChange={(e) => setNewEmail(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="newBirthday">
+                                <Form.Label>New Birthday:</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={newBirthday}
+                                    onChange={(e) => setNewBirthday(e.target.value)}
+                                    required
+                                />
+                            </Form.Group>
+                            <Button
+                                type="submit"
+                                onClick={handleSubmit}
+                                variant="primary"
+                                className="mr-auto"
+                            >
+                                Update Info
+                            </Button>
+                        </Form>
+                    )}
+                </Card.Body>
+                <Button type="button" variant="primary" onClick={toggleShowUpdateForm}>
+                    {showUpdateForm ? "Hide Update Form" : "Show Update Form"}
+                </Button>
+            </Card>
+            {/* DISPLAY USER'S FAVORITE MOVIES LIST */}
+            <Card>
+                <Card.Body>
+                    <Row>
+                        <Card.Title>My Favorite Movies</Card.Title>
+                        {showFavoriteMovies &&
+                            favMovies.map((movie) => (
+                                <Col key={movie._id} sm={12} md={6}>
+                                    <MovieCard movie={movie} />
+                                </Col>
+                            ))}
+                    </Row>
+                </Card.Body>
+                <Button
+                    type="button"
+                    variant="primary"
+                    onClick={toggleShowFavoriteMovies}
+                >
+                    {showFavoriteMovies ? "Hide Favorites" : "Show Favorites"}
+                </Button>
+            </Card>
+            {/* DELETE USER CARD */}
+            <Card>
+                <Card.Body>
+                    <Card.Title>Delete User</Card.Title>
+                    {showDeleteForm && (
+                        <Form>
+                            <Form.Group controlId="newUsername">
+                                <Form.Label>Type Username:</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={newUsername}
+                                    onChange={(e) => setNewUsername(e.target.value)}
+                                    required
+                                    minLength="6"
+                                />
+                            </Form.Group>
+                            <Button
+                                type="submit"
+                                onClick={handleDelete}
+                                variant="danger"
+                                className="ml-auto"
+                            >
+                                Delete User
+                            </Button>
+                        </Form>
+                    )}
+                </Card.Body>
+                <Button type="button" variant="primary" onClick={toggleShowDeleteForm}>
+                    {showDeleteForm ? "Hide Delete User Form" : "Show Delete User Form"}
+                </Button>
+            </Card>
         </Container>
     );
-};
-
-ProfileView.propTypes = {
-    localUser: PropTypes.object.isRequired,
-    movies: PropTypes.array.isRequired,
-    token: PropTypes.string.isRequired,
 };
 
 /*<Container className="mx-1">

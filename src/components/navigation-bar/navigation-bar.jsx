@@ -1,15 +1,19 @@
-import { Navbar, Container, Nav, Row, Col } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 //import { useSelector, useDispatch } from "react-redux";
 //import { setUser } from "../../redux/reducers/user";
 
-export const NavigationBar = ({ user, onLoggedOut }) => {
-    // const user = useSelector((state) => state.user);
-    // const dispatch = useDispatch();
+export const NavigationBar = ({
+    user,
+    onLoggedOut,
+    searchBar,
+    setSearchBar,
+    handleSearchBarReset,
+}) => {
 
     return (
 
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" lassName="mt-auto">
             <Container>
                 <Navbar.Brand as={Link} to="/">
                     My Movie Mix
@@ -19,27 +23,34 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
                     <Nav className="me-auto">
                         {!user && (
                             <>
-                                <Nav.Link className="navLink" as={Link} to="/login">
-                                    Login
-                                </Nav.Link>
-                                <Nav.Link className="navLink" as={Link} to="/signup">
-                                    Signup
-                                </Nav.Link>
-                            </>
-                        )}
-                        {!user && (
-                            <>
-                                <Nav.Link className="navLink" as={Link} to="/">
+                                <Nav.Link as={Link} to="/" onClick={handleSearchBarReset}>
                                     Home
                                 </Nav.Link>
-                                <Nav.Link className="navLink" as={Link} to="/profile">
+                                <Nav.Link
+                                    as={Link}
+                                    to="/profile"
+                                    onClick={handleSearchBarReset}
+                                >
                                     Profile
                                 </Nav.Link>
-
-                                <Nav.Link className="navLink" onClick={onLoggedOut} >
-
+                                <Nav.Link
+                                    onClick={() => {
+                                        onLoggedOut();
+                                        handleSearchBarReset();
+                                    }}
+                                >
                                     Logout
                                 </Nav.Link>
+                                <Form className="my-4">
+                                    <Form.Control
+                                        value={searchBar}
+                                        onChange={(e) => setSearchBar(e.target.value)}
+                                        placeholder="Search for movies..."
+                                    />
+                                    <Button className="ml-2 mb-3" onClick={handleSearchBarReset}>
+                                        Reset
+                                    </Button>
+                                </Form>
                             </>
                         )}
                     </Nav>
@@ -48,7 +59,6 @@ export const NavigationBar = ({ user, onLoggedOut }) => {
         </Navbar>
     );
 };
-
 /*
  //Redux
    //</Nav.Link><Nav.Link className="navLink" onClick={() => dispatch(setUser(null))} >

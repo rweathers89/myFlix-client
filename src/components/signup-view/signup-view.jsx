@@ -1,12 +1,15 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useNavigate } from "react-router-dom";
 
 export const SignupView = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
     const [birthday, setBirthday] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -24,14 +27,21 @@ export const SignupView = () => {
             headers: {
                 "Content-Type": "application/json"
             }
-        }).then((response) => {
-            if (response.ok) {
-                alert("Signup successful");
-                window.location.reload();
-            } else {
-                alert("Signup failed");
-            }
         })
+            .then((response) => {
+                if (response.ok) {
+                    alert("Signup successful");
+                    navigate("/login");
+                } else if (username.length < 6) {
+                    alert("Username must be 6 characters or longer.");
+                } else if (password === "") {
+                    alert("You must enter a password.");
+                } else if (email.includes("@") === false) {
+                    alert("Please enter a valid email address.");
+                } else {
+                    alert("Signup failed");
+                }
+            })
             .catch((error) => {
                 console.error("Error: ", error);
             });
@@ -39,7 +49,7 @@ export const SignupView = () => {
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formUsername">
+            <Form.Group controlId="signupFormUsername">
                 <Form.Label>Username:</Form.Label>
                 <Form.Control
                     type="text"
@@ -50,7 +60,7 @@ export const SignupView = () => {
                 />
             </Form.Group>
 
-            <Form.Group controlId="formPassword">
+            <Form.Group controlId="signupFormPassword">
                 <Form.Label>Password:</Form.Label>
                 <Form.Control
                     type="password"
@@ -61,7 +71,7 @@ export const SignupView = () => {
                 />
             </Form.Group>
 
-            <Form.Group controlId="formEmail">
+            <Form.Group controlId="signupFormEmail">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control
                     type="email"
@@ -71,7 +81,7 @@ export const SignupView = () => {
                 />
             </Form.Group>
 
-            <Form.Group controlId="formBirthday">
+            <Form.Group controlId="signupFormBirthday">
                 <Form.Label>Birthday:</Form.Label>
                 <Form.Control
                     type="date"
@@ -82,7 +92,7 @@ export const SignupView = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit">
-                Submit
+                Signup
             </Button>
         </Form>
     );
