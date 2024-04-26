@@ -1,26 +1,15 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { Row, Col, Button } from "react-bootstrap";
 import { useParams } from "react-router";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./movie-view.css";
 
-//import { MovieCard } from "../movie-card/movie-card";
-//import { Button, Row, Col } from "react-bootstrap";
-//import { useSelector, useDispatch } from "react-redux";
-
 export const MovieView = ({ movies, Username, user, updateUser }) => {
-    //Redux
-    //const movies = useSelector((state) => state.movies.list);
-    //const dispatch = useDispatch();
-
-    //get movieId from the URL
     const { movieId } = useParams();
-    //find movie by movieID
     const movie = movies.find((movie) => movie._id === movieId);
     const navigate = useNavigate();
+
     const [isFavorite, setIsFavorite] = useState(false);
 
     useEffect(() => {
@@ -33,7 +22,6 @@ export const MovieView = ({ movies, Username, user, updateUser }) => {
         } else {
             setIsFavorite(false);
         }
-
     }, [user, movie]);
 
     const addToFavorites = (event) => {
@@ -123,7 +111,6 @@ export const MovieView = ({ movies, Username, user, updateUser }) => {
             });
     };
 
-
     return (
         <>
             <Row className="my-3 justify-content-md-center">
@@ -152,7 +139,7 @@ export const MovieView = ({ movies, Username, user, updateUser }) => {
                         <span>{movie.Featured ? "Yes" : "No"}</span>
                     </div>
                     <Button
-                        className="my-1"
+                        className="back-button"
                         style={{ cursor: "pointer" }}
                         onClick={() => navigate(-1)}
                     >
@@ -161,7 +148,7 @@ export const MovieView = ({ movies, Username, user, updateUser }) => {
                     {isFavorite ? (
                         <Button
                             variant="primary"
-                            className="mt-auto"
+                            className="rmv-fav"
                             onClick={rmvFromFavorites}
                         >
                             Remove from Favorites
@@ -169,7 +156,7 @@ export const MovieView = ({ movies, Username, user, updateUser }) => {
                     ) : (
                         <Button
                             variant="primary"
-                            className="mt-auto"
+                            className="add-fav"
                             onClick={addToFavorites}
                         >
                             Add to Favorites
@@ -180,6 +167,8 @@ export const MovieView = ({ movies, Username, user, updateUser }) => {
         </>
     );
 };
+
+
 
 // Here is where we define all the props constrainst for MovieView
 /*

@@ -12010,15 +12010,49 @@ textarea.form-control-lg {
   }
 }
 
+body {
+  background-color: #ffebcd;
+}
+
+.nav-bar {
+  color: #fff;
+  font: sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.reset-button {
+  background-color: maroon;
+  outline: none;
+}
+
 .back-button {
   color: #f5f5f5;
   background-color: #bc8f8f;
   border: none;
   border-radius: 4px;
+  margin-right: 4px;
   padding: 4px 12px;
 }
 
-.open-button {
+.rmv-fav {
+  color: #f5f5f5;
+  background-color: gray;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+}
+
+.add-fav {
+  color: #f5f5f5;
+  background-color: maroon;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 12px;
+}
+
+.mt-auto {
   color: #fff5ee;
   background-color: #bc8f8f;
   border: none;

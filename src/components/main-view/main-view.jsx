@@ -10,21 +10,15 @@ import { ProfileView } from "../profile-view/profile-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { MovieCard } from "../movie-card/movie-card";
 
-//Redux
-//import { useSelector, useDispatch } from "react-redux";
-//import { setMovies } from "../../redux/reducers/movies";
+
 
 export const MainView = () => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     const storedToken = localStorage.getItem("token");
-    const [movies, setMovies] = useState([]);
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
+    const [movies, setMovies] = useState([]);
     const [searchBar, setSearchBar] = useState("");
-    //Redux
-    //const user = useSelector((state) => state.user);
-    //const movies = useSelector((state) => state.movies.list);
-    //const dispatch = useDispatch();
 
 
     useEffect(() => {
@@ -35,32 +29,26 @@ export const MainView = () => {
         })
             .then((response) => response.json())
             .then((data) => {
-                // setMovies(movies);
-                console.log(data);
                 const moviesFromApi = data.map((movie) => {
                     return {
                         _id: movie._id,
                         Title: movie.Title,
                         Description: movie.Description,
                         Genre: {
-                            Name: movie.Genre,
-                            Description: movie.Genre.Decription
+                            Name: movie.Genre.Name,
+                            Description: movie.Genre.Description,
                         },
-                        // change url to myMovie Mix API link
-
                         Director: {
-                            Name: movie.Director,
-                            Bio: movie.Director.Bio
+                            Name: movie.Director.Name,
+                            Bio: movie.Director.Bio,
+                            Birth: movie.Director.Birth,
+                            Death: movie.Director.Death,
                         },
-                        Image: movie.ImagePath,
+                        ImagePath: movie.ImagePath,
                         Featured: movie.Featured,
                     };
                 });
-                //redux
-                //dispatch(setMovies(moviesFromApi));
                 setMovies(moviesFromApi);
-                // localStorage.setItem("movies", JSON.stringify(movies));
-                console.log("movies from api:", data);
             });
     }, [token]); //END useEffect (!token)
 
@@ -79,7 +67,26 @@ export const MainView = () => {
             searchBar.trim() === "" ||
             movie.Title.toLowerCase().includes(searchBar.toLowerCase())
     );
-
+    /*
+        const handleSearch = (e) => {
+    
+            const query = e.target.value;
+            setQuery(query);
+    
+            const storedMovies = JSON.parse(localStorage.getItem("movies"));
+    
+            //Filter movies by title and genre
+            const filteredMovies = storedMovies.filter((movie) => {
+                return (
+    
+                    movie.title.toLowerCase().includes(searchBar.toLowerCase()) ||
+                    movie.genre.some((genre) => genre.toLowerCase().includes(query.toLowerCase()))
+                );
+            })
+    
+            setMovies(filteredMovies);
+        }
+    */
 
     return (
         <BrowserRouter>
@@ -94,7 +101,7 @@ export const MainView = () => {
                 setSearchBar={setSearchBar}
                 handleSearchBarReset={handleSearchBarReset}
             />
-            <Row className="justify-content-md-center">
+            <Row className="justify-content-md-center my-5">
                 <Routes>
                     <Route
                         path="/signup"
@@ -134,14 +141,13 @@ export const MainView = () => {
                                                 setToken(token);
                                             }}
                                         />
-
                                     </Col>
                                 )}
                             </>
                         }
                     />
                     <Route
-                        path="/movies/:movieId"
+                        path="movies/:movieId"
                         element={
                             <>
                                 {!user ? (
@@ -161,7 +167,24 @@ export const MainView = () => {
                             </>
                         }
                     />
-
+                    <Route
+                        path="/profile"
+                        element={
+                            <>
+                                {!user ? (
+                                    <Navigate to="/login" replace />
+                                ) : (
+                                    <Col md={8}>
+                                        <ProfileView
+                                            user={user}
+                                            movies={movies}
+                                            updateUser={updateUser}
+                                        />
+                                    </Col>
+                                )}
+                            </>
+                        }
+                    />
                     <Route
                         path="/"
                         element={
@@ -176,31 +199,16 @@ export const MainView = () => {
                                             <Col
                                                 className="mb-3"
                                                 key={movie._id}
-                                                md={3}>
+                                                sm={12}
+                                                md={6}
+                                                lg={4}
+                                                xl={3}
+                                                xxl={2}
+                                            >
                                                 <MovieCard movie={movie} />
                                             </Col>
                                         ))}
                                     </>
-                                )}
-                            </>
-                        }
-                    />
-                    <Route
-                        path="/profile"
-                        element={
-                            <>
-                                {!user ? (
-                                    <Navigate to="/login" replace />
-                                ) : (
-                                    <Col md={8}>
-                                        <ProfileView
-                                            user={user}
-                                            updateUser={updateUser}
-                                            //localUser={user} 
-                                            movies={movies}
-                                        //token={token} 
-                                        />
-                                    </Col>
                                 )}
                             </>
                         }
@@ -212,7 +220,17 @@ export const MainView = () => {
 };
 
 
+
+
 /*
+REDUX
+
+//Redux
+//import { useSelector, useDispatch } from "react-redux";
+//import { setMovies } from "../../redux/reducers/movies";
+//const user = useSelector((state) => state.user);
+    //const movies = useSelector((state) => state.movies.list);
+    //const dispatch = useDispatch();
 const handleSearch = (e) => {
 
         const query = e.target.value;
@@ -346,5 +364,25 @@ const handleSearch = (e) => {
         </BrowserRouter>
     );
 };
+
+ <Route 
+        path="/profile" 
+        element={
+          <Row className="justify-content-center">
+          <Col 
+          sm={12} md={9} lg={7}
+           >
+          {user ? (
+          <ProfileView
+            token={token}
+            user={user}
+            movies={movies}
+            onSubmit={(user) => setUser(user)}
+          />) : (<Navigate to="/login" />)
+          } 
+        </Col>
+        </Row>
+        }
+        />
         
 */

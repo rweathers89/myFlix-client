@@ -1,1 +1,18 @@
 @import '~bootstrap/scss/bootstrap.scss';
+
+body {
+    background-color: blanchedalmond;
+}
+
+.nav-bar {
+    color: white;
+    font: sans-serif;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.reset-button {
+    background-color: maroon;
+    outline: none;
+}

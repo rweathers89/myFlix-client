@@ -5,7 +5,6 @@ import { MovieCard } from "../movie-card/movie-card";
 import "./profile-view.css";
 
 export const ProfileView = ({ user, movies }) => {
-    // const storedUser = JSON.parse(localStorage.getItem("user"));
     const token = localStorage.getItem("token");
     const [userData, setUserData] = useState(user);
     const Username = user ? user.Username : null;
@@ -136,7 +135,7 @@ export const ProfileView = ({ user, movies }) => {
                         </div>
                     )}
                 </Card.Body>
-                <Button type="button" variant="primary" onClick={toggleShowUserInfo}>
+                <Button type="button" variant="primary" onClick={toggleShowUserInfo} className="show-button">
                     {showUserInfo ? "Hide User Info" : "Show User Info"}
                 </Button>
             </Card>
@@ -195,7 +194,7 @@ export const ProfileView = ({ user, movies }) => {
                         </Form>
                     )}
                 </Card.Body>
-                <Button type="button" variant="primary" onClick={toggleShowUpdateForm}>
+                <Button type="button" variant="primary" onClick={toggleShowUpdateForm} className="show-button">
                     {showUpdateForm ? "Hide Update Form" : "Show Update Form"}
                 </Button>
             </Card>
@@ -216,6 +215,7 @@ export const ProfileView = ({ user, movies }) => {
                     type="button"
                     variant="primary"
                     onClick={toggleShowFavoriteMovies}
+                    className="show-button"
                 >
                     {showFavoriteMovies ? "Hide Favorites" : "Show Favorites"}
                 </Button>
@@ -254,6 +254,13 @@ export const ProfileView = ({ user, movies }) => {
         </Container>
     );
 };
+
+/*
+EXERCISES
+
+*/
+
+
 
 /*<Container className="mx-1">
     <Row>

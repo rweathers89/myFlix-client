@@ -1,5 +1,4 @@
 // Here you import the PropTypes library
-//import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -9,30 +8,25 @@ import "./movie-card.css";
 export const MovieCard = ({ movie }) => {
     return (
         <Card className="h-100" md={6}>
-            <Link to={`/movies/${encodeURIComponent(movie.id)}`}>
-                <Card.Img variant="top" src={movie.ImagePath} />
-                <Card.Body className="d-flex flex-column">
-                    <Card.Title>{movie.Title}</Card.Title>
-                    <Card.Text>{movie.Description}</Card.Text>
-                    <Card.Text>{movie.Genre.Name}</Card.Text>
-
-                    <Button variant="link" className="open-button">
+            <Card.Img variant="top" src={movie.ImagePath} />
+            <Card.Body className="d-flex flex-column">
+                <Card.Title>{movie.Title}</Card.Title>
+                <Card.Text>{movie.Description}</Card.Text>
+                <Card.Text>{movie.Genre.Name}</Card.Text>
+                <Link to={`/movies/${encodeURIComponent(movie._id)}`}>
+                    <Button variant="link" className="mt-auto">
                         Open
                     </Button>
-                </Card.Body>
-            </Link>
+                </Link>
+            </Card.Body>
         </Card>
-    ); // END return
+    );
 }; // END const MovieCard
 
 // Here is where we define all the props constraints for the MovieCard
 MovieCard.propTypes = {
     movie: PropTypes.shape({
-        Title: PropTypes.string.isRequired,
-        //image: PropTypes.string.isRequired,
-        // director: PropTypes.string.isRequired,
-        // genre: PropTypes.string.isRequired,
-        //description: PropTypes.string,
+        Title: PropTypes.string,
     }).isRequired,
 };
 

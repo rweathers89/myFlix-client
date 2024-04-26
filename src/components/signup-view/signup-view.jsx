@@ -1,6 +1,5 @@
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export const SignupView = () => {
@@ -18,15 +17,15 @@ export const SignupView = () => {
             Username: username,
             Password: password,
             Email: email,
-            Birthday: birthday
+            Birthday: birthday,
         };
 
         fetch("https://movie-api-nj6m.onrender.com/users", {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
-                "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json",
+            },
         })
             .then((response) => {
                 if (response.ok) {
@@ -56,10 +55,9 @@ export const SignupView = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
-                    minLength="3"
+                    minLength="6"
                 />
             </Form.Group>
-
             <Form.Group controlId="signupFormPassword">
                 <Form.Label>Password:</Form.Label>
                 <Form.Control
@@ -70,7 +68,6 @@ export const SignupView = () => {
                     minLength="6"
                 />
             </Form.Group>
-
             <Form.Group controlId="signupFormEmail">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control
@@ -78,9 +75,9 @@ export const SignupView = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                // add requirement for "@" and "."
                 />
             </Form.Group>
-
             <Form.Group controlId="signupFormBirthday">
                 <Form.Label>Birthday:</Form.Label>
                 <Form.Control
@@ -90,13 +87,13 @@ export const SignupView = () => {
                     required
                 />
             </Form.Group>
-
             <Button variant="primary" type="submit">
                 Signup
             </Button>
         </Form>
     );
 };
+
 
 /*
 return (

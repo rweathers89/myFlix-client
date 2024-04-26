@@ -1,7 +1,6 @@
 import { Navbar, Container, Nav, Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
-//import { useSelector, useDispatch } from "react-redux";
-//import { setUser } from "../../redux/reducers/user";
+import "../../index.scss";
 
 export const NavigationBar = ({
     user,
@@ -10,18 +9,26 @@ export const NavigationBar = ({
     setSearchBar,
     handleSearchBarReset,
 }) => {
-
     return (
-
-        <Navbar bg="light" expand="lg" lassName="mt-auto">
+        <Navbar bg="beige" expand="lg" className="mt-auto">
             <Container>
-                <Navbar.Brand as={Link} to="/">
-                    My Movie Mix
+                <Navbar.Brand as={Link} to="/" className="nav-bar">
+                    MyFlix App
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="me-auto">
+                    <Nav className="mt-auto">
                         {!user && (
+                            <>
+                                <Nav.Link as={Link} to="/login">
+                                    Login
+                                </Nav.Link>
+                                <Nav.Link as={Link} to="/signup">
+                                    Signup
+                                </Nav.Link>
+                            </>
+                        )}
+                        {user && (
                             <>
                                 <Nav.Link as={Link} to="/" onClick={handleSearchBarReset}>
                                     Home
@@ -47,7 +54,7 @@ export const NavigationBar = ({
                                         onChange={(e) => setSearchBar(e.target.value)}
                                         placeholder="Search for movies..."
                                     />
-                                    <Button className="ml-2 mb-3" onClick={handleSearchBarReset}>
+                                    <Button className="reset-button" onClick={handleSearchBarReset}>
                                         Reset
                                     </Button>
                                 </Form>
@@ -59,6 +66,7 @@ export const NavigationBar = ({
         </Navbar>
     );
 };
+
 /*
  //Redux
    //</Nav.Link><Nav.Link className="navLink" onClick={() => dispatch(setUser(null))} >

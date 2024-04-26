@@ -4,4 +4,21 @@
     background-color: rosybrown;
     border: none;
     border-radius: 4px;
+    margin-right: 4px;
+}
+
+.rmv-fav {
+    padding: 4px 12px 4px 12px;
+    color: whitesmoke;
+    background-color: gray;
+    border: none;
+    border-radius: 4px;
+}
+
+.add-fav {
+    padding: 4px 12px 4px 12px;
+    color: whitesmoke;
+    background-color: maroon;
+    border: none;
+    border-radius: 4px;
 }
