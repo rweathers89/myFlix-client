@@ -1,7 +1,7 @@
 # myFlix-client app
 
 ## Description
-The client-side for an app called MyMovieMix, built using React based on its existing server-side code (REST API and database). myFlix is a single-page application that allows users to create an account and login to view a list of Ghibli movies, navigate between movie details/profile/account views, and create a favorites list.
+The client-side for an app called MyMovieMix, built using React based on its existing server-side code (REST API and database). myFlix is a single-page application that allows users to create an account and login to view a list of movies, navigate between movie details/profile/account views, and create a favorites list.
 
 ## Key Features
 * Search for movies via search bar
