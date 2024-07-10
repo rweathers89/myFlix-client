@@ -10,7 +10,6 @@ The client-side for an app called MyMovieMix, built using React based on its exi
   * Director name
   * Release year
   * Genre
-  * Similar movies
     
 * Add/remove movie from favorites
 * Users can update their info & delete their account
